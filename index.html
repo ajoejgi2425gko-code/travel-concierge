@@ -17,7 +17,7 @@
       <p class="eyebrow">YOUR PERSONAL TRAVEL PLANNER</p>
       <h1>次の旅を、<br><em>もっと自由に。</em></h1>
       <p class="hero-copy">希望を選ぶだけ。AIに相談するための専用プロンプトを自動で作成します。</p>
-      <div class="hero-pills"><span>✓ 登録不要</span><span>✓ 運営者のAI従量課金なし</span><span>✓ スマホ対応</span></div>
+      <div class="hero-pills"><span>✓ 登録不要</span><span>✓ スマホ対応</span></div>
     </div>
     <div class="hero-art" aria-hidden="true">
       <div class="sun"></div><div class="mountain mountain-back"></div><div class="mountain mountain-front"></div>
@@ -46,13 +46,14 @@
             <input id="departure" type="text" placeholder="例：東京都、東京駅、横浜市">
           </label>
           <label>出発日
-            <input id="startDate" type="date">
+            <input id="startDate" type="date" aria-describedby="dateHelp">
           </label>
           <label>帰着日
-            <input id="endDate" type="date">
+            <input id="endDate" type="date" aria-describedby="dateHelp">
           </label>
           <label>日程
-            <select id="duration"><option value="日帰り">日帰り</option><option value="1泊2日">1泊2日</option><option value="2泊3日">2泊3日</option><option value="3泊4日">3泊4日</option><option value="4泊以上">4泊以上</option><option value="未定・提案してほしい">未定・提案してほしい</option></select>
+            <select id="duration"><option value="未定・提案してほしい" selected>未定・提案してほしい</option><option value="日帰り">日帰り</option><option value="1泊2日">1泊2日</option><option value="2泊3日">2泊3日</option><option value="3泊4日">3泊4日</option><option value="4泊以上">4泊以上</option></select>
+            <span id="dateHelp" class="field-help">日付を両方選ぶと泊数を自動計算します。日程が未定なら、日付は空欄のままで大丈夫です。</span>
           </label>
         </div>
       </section>
@@ -152,8 +153,16 @@
             <button type="button" class="primary-button" id="copyButton">▣ プロンプトをコピー</button>
             <button type="button" class="secondary-button" id="shareButton">共有する</button>
           </div>
-          <a class="chatgpt-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く ↗</a>
-          <p class="small-note">ChatGPTを開いた後、入力欄にコピーした文章を貼り付けて送信してください。ほかのAIサービスでも利用できます。</p>
+          <div class="ai-choice">
+            <h4>使いたいAIを選んでください</h4>
+            <p>先にプロンプトをコピーしてから、普段お使いのAIを開いて貼り付けてください。</p>
+            <div class="ai-links">
+              <a class="ai-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer"><span class="ai-name">ChatGPT</span><span class="ai-open">開く ↗</span></a>
+              <a class="ai-link" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer"><span class="ai-name">Gemini</span><span class="ai-open">開く ↗</span></a>
+              <a class="ai-link" href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer"><span class="ai-name">Microsoft Copilot</span><span class="ai-open">開く ↗</span></a>
+            </div>
+          </div>
+          <p class="small-note">AIサービスによって回答の内容やWeb検索機能、利用条件が異なります。コピーした相談文は、どのサービスにも貼り付けて利用できます。</p>
           <p id="copyStatus" class="status" role="status"></p>
         </div>
       </section>

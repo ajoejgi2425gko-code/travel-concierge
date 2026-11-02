@@ -1,4 +1,4 @@
-const CACHE_NAME = 'travel-concierge-v1';
+const CACHE_NAME = 'travel-concierge-v3';
 const FILES = ['./','./index.html','./style.css','./app.js','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(FILES)));

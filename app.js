@@ -4,10 +4,52 @@ const value = (id) => $(id).value.trim();
 const checked = (id) => [...document.querySelectorAll(`#${id} input:checked`)].map(x => x.value);
 const clean = (v) => v && v.trim() ? v.trim() : '指定なし';
 
+const startDateInput = $('startDate');
+const endDateInput = $('endDate');
+const durationSelect = $('duration');
+const dateHelp = $('dateHelp');
+
+function updateDurationFromDates() {
+  const start = startDateInput.value;
+  const end = endDateInput.value;
+
+  // 帰着日は出発日より前に設定できないようにする
+  endDateInput.min = start || '';
+  if (start && end && end < start) {
+    endDateInput.value = '';
+  }
+
+  if (startDateInput.value && endDateInput.value) {
+    const [sy, sm, sd] = startDateInput.value.split('-').map(Number);
+    const [ey, em, ed] = endDateInput.value.split('-').map(Number);
+    const startUtc = Date.UTC(sy, sm - 1, sd);
+    const endUtc = Date.UTC(ey, em - 1, ed);
+    const nights = Math.round((endUtc - startUtc) / 86400000);
+    const calculated = nights === 0 ? '日帰り'
+      : nights === 1 ? '1泊2日'
+      : nights === 2 ? '2泊3日'
+      : nights === 3 ? '3泊4日'
+      : '4泊以上';
+    durationSelect.value = calculated;
+    durationSelect.disabled = true;
+    dateHelp.textContent = `選択した日付から「${calculated}」と自動計算しました。日付を消すと、日程を自由に選べます。`;
+  } else {
+    if (durationSelect.disabled) durationSelect.value = '未定・提案してほしい';
+    durationSelect.disabled = false;
+    dateHelp.textContent = '日付を両方選ぶと泊数を自動計算します。日程が未定なら、日付は空欄のままで大丈夫です。';
+  }
+}
+
+startDateInput.addEventListener('change', updateDurationFromDates);
+endDateInput.addEventListener('change', updateDurationFromDates);
+
 function buildPrompt() {
   const destination = clean(value('destination'));
-  const dates = value('startDate') || value('endDate')
-    ? `${clean(value('startDate'))} ～ ${clean(value('endDate'))}`
+  const startDate = value('startDate');
+  const endDate = value('endDate');
+  const dates = startDate && endDate ? `${startDate} ～ ${endDate}`
+    : startDate ? `出発日：${startDate}（帰着日は未定）`
+    : endDate ? `帰着日：${endDate}（出発日は未定）`
     : '未定';
   const styles = checked('styles');
   const interests = checked('interests');
