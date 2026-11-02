@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b62">
+  <meta name="description" content="旅行の条件を選ぶだけで、AIに相談するための旅行プラン作成プロンプトを自動生成する無料ツールです。">
+  <title>旅コンシェルジュ｜AI旅行プラン作成</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand"><span class="brand-mark">✦</span><span>旅コンシェルジュ</span></div>
+      <p class="eyebrow">YOUR PERSONAL TRAVEL PLANNER</p>
+      <h1>次の旅を、<br><em>もっと自由に。</em></h1>
+      <p class="hero-copy">希望を選ぶだけ。AIに相談するための専用プロンプトを自動で作成します。</p>
+      <div class="hero-pills"><span>✓ 登録不要</span><span>✓ 運営者のAI従量課金なし</span><span>✓ スマホ対応</span></div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="sun"></div><div class="mountain mountain-back"></div><div class="mountain mountain-front"></div>
+      <div class="lake"></div><div class="tree tree-one">♣</div><div class="tree tree-two">♣</div>
+      <div class="plane">✈</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <div><span class="step-label">PLAN YOUR TRIP</span><h2>どんな旅行にしますか？</h2></div>
+      <p>決まっていない項目は空欄や「おまかせ」のままで大丈夫です。</p>
+    </section>
+
+    <form id="tripForm">
+      <section class="panel">
+        <div class="section-heading"><span class="number">01</span><div><h3>旅行の基本情報</h3><p>行き先や日程など、決まっている範囲で入力してください。</p></div></div>
+        <div class="form-grid">
+          <label>旅行先
+            <input id="destination" type="text" placeholder="例：軽井沢、沖縄、北海道（空欄ならAIに提案してもらう）">
+          </label>
+          <label>旅行先の範囲
+            <select id="area"><option value="国内旅行">国内旅行</option><option value="海外旅行">海外旅行</option><option value="国内・海外どちらも候補">国内・海外どちらも候補</option></select>
+          </label>
+          <label>出発地
+            <input id="departure" type="text" placeholder="例：東京都、東京駅、横浜市">
+          </label>
+          <label>出発日
+            <input id="startDate" type="date">
+          </label>
+          <label>帰着日
+            <input id="endDate" type="date">
+          </label>
+          <label>日程
+            <select id="duration"><option value="日帰り">日帰り</option><option value="1泊2日">1泊2日</option><option value="2泊3日">2泊3日</option><option value="3泊4日">3泊4日</option><option value="4泊以上">4泊以上</option><option value="未定・提案してほしい">未定・提案してほしい</option></select>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading"><span class="number">02</span><div><h3>誰と、どんな旅？</h3><p>旅行のスタイルを選択してください（複数選択できます）。</p></div></div>
+        <div class="choice-grid" id="styles">
+          <label class="choice"><input type="checkbox" value="家族旅行"><span>👨‍👩‍👧 家族旅行</span></label>
+          <label class="choice"><input type="checkbox" value="子連れ旅行"><span>🧸 子連れ旅行</span></label>
+          <label class="choice"><input type="checkbox" value="三世代旅行"><span>👵 三世代旅行</span></label>
+          <label class="choice"><input type="checkbox" value="カップル・夫婦旅行"><span>♡ カップル・夫婦</span></label>
+          <label class="choice"><input type="checkbox" value="友人との旅行"><span>✧ 友人との旅行</span></label>
+          <label class="choice"><input type="checkbox" value="ひとり旅"><span>🎒 ひとり旅</span></label>
+          <label class="choice"><input type="checkbox" value="記念日旅行"><span>🎉 記念日旅行</span></label>
+          <label class="choice"><input type="checkbox" value="初めての土地への旅行"><span>🧭 初めての土地</span></label>
+        </div>
+        <div class="form-grid three">
+          <label>大人
+            <select id="adults"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option value="9人以上">9人以上</option></select>
+          </label>
+          <label>子ども
+            <select id="children"><option value="0人">0人</option><option>1人</option><option>2人</option><option>3人</option><option>4人</option><option value="5人以上">5人以上</option></select>
+          </label>
+          <label>子どもの年齢
+            <input id="ages" type="text" placeholder="例：5歳、8歳">
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading"><span class="number">03</span><div><h3>予算・移動・宿泊</h3><p>希望に近いプランを考えるための条件です。</p></div></div>
+        <div class="form-grid">
+          <label>予算（旅行全体）
+            <select id="budget"><option value="指定なし">指定なし</option><option>3万円以内</option><option>5万円以内</option><option>10万円以内</option><option>15万円以内</option><option>20万円以内</option><option>30万円以内</option><option>50万円以内</option><option>50万円以上</option></select>
+          </label>
+          <label>予算の基準
+            <select id="budgetBasis"><option value="総額">総額</option><option value="1人あたり">1人あたり</option><option value="指定なし">指定なし</option></select>
+          </label>
+          <label>主な移動手段
+            <select id="transport"><option>おまかせ</option><option>自家用車・レンタカー</option><option>電車・新幹線</option><option>飛行機</option><option>バス</option><option>徒歩・公共交通機関</option><option>複数を組み合わせる</option></select>
+          </label>
+          <label>宿泊の希望
+            <select id="stay"><option>おまかせ</option><option>ホテル</option><option>旅館・温泉宿</option><option>リゾートホテル</option><option>コテージ・貸別荘</option><option>キャンプ・グランピング</option><option>宿泊なし（日帰り）</option></select>
+          </label>
+          <label>宿泊施設の希望・条件
+            <input id="stayWish" type="text" placeholder="例：子ども向け施設、和室、朝食付き">
+          </label>
+          <label>食事の希望
+            <input id="food" type="text" placeholder="例：地元グルメ、子ども向けメニュー、アレルギー配慮">
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading"><span class="number">04</span><div><h3>旅でしたいこと・こだわり</h3><p>重視したいことを選び、自由な希望も追加できます。</p></div></div>
+        <div class="choice-grid" id="interests">
+          <label class="choice"><input type="checkbox" value="観光・名所巡り"><span>🏯 観光・名所</span></label>
+          <label class="choice"><input type="checkbox" value="自然・絶景"><span>🏞 自然・絶景</span></label>
+          <label class="choice"><input type="checkbox" value="温泉・リラックス"><span>♨ 温泉・癒やし</span></label>
+          <label class="choice"><input type="checkbox" value="テーマパーク・遊園地"><span>🎢 テーマパーク</span></label>
+          <label class="choice"><input type="checkbox" value="グルメ・食べ歩き"><span>🍽 グルメ</span></label>
+          <label class="choice"><input type="checkbox" value="買い物"><span>🛍 買い物</span></label>
+          <label class="choice"><input type="checkbox" value="体験・アクティビティ"><span>🚣 体験・アクティビティ</span></label>
+          <label class="choice"><input type="checkbox" value="ゆったり過ごす"><span>☕ ゆったり</span></label>
+          <label class="choice"><input type="checkbox" value="写真映えスポット"><span>📷 写真映え</span></label>
+          <label class="choice"><input type="checkbox" value="歴史・文化"><span>⛩ 歴史・文化</span></label>
+        </div>
+        <div class="form-grid">
+          <label>旅行のペース
+            <select id="pace"><option>バランスよく</option><option>ゆったり・余裕を持って</option><option>できるだけ多く観光したい</option><option>子どもや高齢者に無理のないペース</option></select>
+          </label>
+          <label>避けたいこと・配慮事項
+            <input id="avoid" type="text" placeholder="例：長時間の運転、階段が多い場所、混雑">
+          </label>
+        </div>
+        <label class="full-label">その他の希望・補足
+          <textarea id="extra" rows="3" placeholder="例：初日は午後到着。最終日は早めに帰宅したい。雨の日の候補も知りたい。"></textarea>
+        </label>
+      </section>
+
+      <section class="panel output-panel">
+        <div class="section-heading"><span class="number">05</span><div><h3>AIへの相談内容を作成</h3><p>入力内容をもとに、旅行のプロとして回答してもらう指示文を作ります。</p></div></div>
+        <div class="output-options">
+          <label>AIへの依頼の詳しさ
+            <select id="detail"><option value="詳しく">詳しく（おすすめ）</option><option value="要点を簡潔に">要点を簡潔に</option></select>
+          </label>
+          <label>最新情報の扱い
+            <select id="research"><option value="可能ならWeb検索を使って最新情報を確認">Web検索で最新情報を確認してほしい</option><option value="検索機能が使えない場合は、未確認情報を明確に区別">検索できる範囲で確認してほしい</option></select>
+          </label>
+        </div>
+        <button class="primary-button" type="submit"><span>✦</span> AIへの相談文を作成する</button>
+        <div id="result" class="result hidden" aria-live="polite">
+          <div class="result-head"><div><span class="step-label">YOUR PROMPT IS READY</span><h3>旅行プランの相談文ができました</h3></div><span class="ready-mark">✓</span></div>
+          <p class="result-note">下の文章をAIに渡してください。ChatGPTなどのAIサービスで、Web検索機能が使える場合は有効にすると便利です。</p>
+          <textarea id="promptOutput" rows="18" readonly></textarea>
+          <div class="button-row">
+            <button type="button" class="primary-button" id="copyButton">▣ プロンプトをコピー</button>
+            <button type="button" class="secondary-button" id="shareButton">共有する</button>
+          </div>
+          <a class="chatgpt-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く ↗</a>
+          <p class="small-note">ChatGPTを開いた後、入力欄にコピーした文章を貼り付けて送信してください。ほかのAIサービスでも利用できます。</p>
+          <p id="copyStatus" class="status" role="status"></p>
+        </div>
+      </section>
+    </form>
+
+    <section class="tips">
+      <h3>上手に使うポイント</h3>
+      <div class="tip-grid">
+        <div><span>01</span><strong>未定でも大丈夫</strong><p>行き先や予算が決まっていなければ、AIに候補を提案してもらえます。</p></div>
+        <div><span>02</span><strong>追加相談もできる</strong><p>AIの回答に「もっと安く」「雨の日向けに」などと続けて相談できます。</p></div>
+        <div><span>03</span><strong>予約前に公式確認</strong><p>営業時間・料金・運行状況・空室などは、必ず公式情報で確認してください。</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="brand"><span class="brand-mark">✦</span><span>旅コンシェルジュ</span></div><p>旅行の計画を、もっと楽しく。</p><small>このアプリはAIへの相談文を作成するツールです。AIサービスの利用条件・料金は各サービスの案内をご確認ください。</small></footer>
+  <script src="./app.js"></script>
+</body>
+</html>
