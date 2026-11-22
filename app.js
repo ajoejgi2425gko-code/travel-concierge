@@ -96,7 +96,16 @@ function buildPrompt() {
 '8. 参照した情報源と、最新情報として確認できなかった項目',
 '',
 `回答の詳しさ：${value('detail')}。`,
-'見やすい見出し、表、箇条書きを使い、旅行当日にそのまま参考にできる具体性を重視してください。'
+'見やすい見出し、表、箇条書きを使い、旅行当日にそのまま参考にできる具体性を重視してください。',
+'',
+'【旅程表への取り込み用・かんたん一覧】',
+'最後に、旅行の予定だけを次の読みやすい形式で1行に1件ずつ書いてください。これは旅行のしおり作成用です。プログラムコードやJSONは出力しないでください。',
+'【旅程一覧ここから】',
+'2026-11-28 | 08:30 | 東京駅を出発 | 東京駅 | 新幹線で移動',
+'2026-11-28 | 10:00 | 現地で観光 | 観光スポット | 滞在60分',
+'【旅程一覧ここまで】',
+'上の2行は形式の見本です。実際の旅行日付・予定に置き換えてください。日付未定なら「未定」とし、時刻未定なら「未定」としてください。場所・メモがない場合は空欄でも構いません。回答全体は通常の日本語で、旅程一覧もコードブロックで囲まないでください。'
+
   ];
   return lines.join('\n');
 }
@@ -138,5 +147,5 @@ $('shareButton').addEventListener('click', async () => {
 });
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+  window.addEventListener('load', async () => {try{const reg=await navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'});let refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!refreshing){refreshing=true;location.reload();}});const showUpdate=()=>{const el=document.getElementById('tcUpdateBanner');if(el)el.hidden=false;};if(reg.waiting&&navigator.serviceWorker.controller)showUpdate();reg.addEventListener('updatefound',()=>{const w=reg.installing;if(w)w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)showUpdate();});});document.getElementById('tcUpdateButton')?.addEventListener('click',()=>{if(reg.waiting)reg.waiting.postMessage({type:'SKIP_WAITING'});else reg.update();});reg.update().catch(()=>{});}catch{}});
 }
